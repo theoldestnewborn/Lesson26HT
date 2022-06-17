@@ -10,6 +10,7 @@ import jakarta.servlet.annotation.*;
 
 @WebServlet(name = "successServlet", value = "/successful")
 public class SuccessServlet extends HttpServlet {
+    public static int visits;
 
     public void init(){
     }
@@ -23,11 +24,10 @@ public class SuccessServlet extends HttpServlet {
         response.setContentType("text/html");
         SessionAttributes sa = new SessionAttributes();
         HttpSession session = request.getSession();
-        if ((boolean)session.getAttribute("ifLogged")) {
+        if ((boolean)session.getAttribute("isLogged")) {
             RequestDispatcher dispatcher = request.getRequestDispatcher("successful.jsp");
             dispatcher.forward(request,response);
-            int visits = sa.countVisits(request);
-            session.setAttribute("visits", visits);
+            visits++;
         } else {
             RequestDispatcher dispatcher = request.getRequestDispatcher("error.jsp");
             dispatcher.forward(request,response);

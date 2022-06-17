@@ -9,6 +9,7 @@ import jakarta.servlet.annotation.*;
 
 @WebServlet(name = "authorizationServlet", value = "/authorization")
 public class AuthorizationServlet extends HttpServlet {
+    public String login, password;
 
     public void init(){
     }
@@ -21,7 +22,12 @@ public class AuthorizationServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         response.setContentType("text/html");
         SessionAttributes sa = new SessionAttributes();
-        sa.ifLogged(request,response);
+        login =request.getParameter("login");
+        password = request.getParameter("password");
+        sa.isLogged(login, password);
+        String route = sa.getRoute(request, request.getSession());
+        request.getRequestDispatcher(route).forward(request,response);
+
     }
 
     public void destroy() {

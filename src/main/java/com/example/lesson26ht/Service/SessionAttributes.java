@@ -1,5 +1,6 @@
 package com.example.lesson26ht.Service;
 
+import com.example.lesson26ht.DB.UserRepository;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,39 +13,23 @@ import java.io.IOException;
 public class SessionAttributes {
 
 
-    public boolean ifLogged (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession();
-
+    public String getRoute(HttpServletRequest request, HttpSession session) throws ServletException, IOException {
         String login = request.getParameter("login");
         String password = request.getParameter("password");
-        if (login==null||password==null) {
-        session.setAttribute("ifLogged", false);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("error.jsp");
-        dispatcher.forward(request,response);
-        } else if (login.equals("123")&&password.equals("123")) {
-            session.setAttribute("ifLogged", true);
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/successful");
-            dispatcher.forward(request,response);
-        } else {
-            session.setAttribute("ifLogged", false);
-            RequestDispatcher dispatcher = request.getRequestDispatcher("error.jsp");
-            dispatcher.forward(request,response);
+        String route = "error.jsp";
+
+        if (isLogged(login, password)) {
+            session.setAttribute("isLogged", true);
+            route = "/successful";
         }
-        return (boolean) session.getAttribute("ifLogged");
+        return route;
     }
 
+    public boolean isLogged(String login, String password){
+        UserRepository ur = new UserRepository();
+        return login!=null && password!=null &&
+                (ur.getUser(login).equals(login+password));
 
-    public Integer countVisits (HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        Integer visits = (Integer) session.getAttribute("visits");
 
-        if (visits == null) {
-            visits = 1;
-            session.setAttribute("visits", visits);
-        } else {
-            visits++;
-            session.setAttribute("visits", visits);
-        }
-        return visits;
     }
 }

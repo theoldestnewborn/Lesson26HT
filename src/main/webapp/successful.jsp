@@ -1,3 +1,4 @@
+<%@ page import="static com.example.lesson26ht.Servlet.SuccessServlet.visits" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
@@ -18,7 +19,7 @@
             <div class="col-12 col-md-8 col-lg-6 col-xl-5">
                 <div class="card bg-dark text-white" style="border-radius: 1rem;">
                     <div class="alert alert-success" role="alert">
-                        Successfully logged in <%= session.getAttribute("visits") %> time(s)
+                        Successfully logged in <%= visits %> time(s)
                     </div>
                 </div>
             </div>
